@@ -55,10 +55,17 @@ export function CourseCard({ course }: { course: Course }) {
         <div className="mt-4 flex items-center justify-between text-xs">
           <div className="flex items-center gap-1 font-semibold text-text-primary">
             <span className="text-amber-500">★</span>
-            <span>{formatNullableNumber(course.averageRating)}</span>
-            <span className="font-normal text-text-muted">
-              ({formatNullableNumber(course.enrolmentCount)})
-            </span>
+           {/* Rating & Enrolments */}
+<div className="mt-4 flex items-center justify-between text-xs">
+  <div className="flex items-center gap-1 font-semibold text-text-primary">
+    <span className="text-amber-500">★</span>
+    <span>{formatNullableNumber(course.averageRating)}</span>
+  </div>
+
+  <span className="text-text-muted">
+    {formatNullableNumber(course.enrolmentCount)} enrolled
+  </span>
+</div>
           </div>
 
           <div className="flex items-center gap-1.5">

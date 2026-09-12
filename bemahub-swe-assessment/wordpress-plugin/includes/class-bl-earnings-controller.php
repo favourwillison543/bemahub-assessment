@@ -17,13 +17,12 @@ class BL_Earnings_Controller {
 
     const MINIMUM_WITHDRAWAL_MINOR = 50000;
 
-    public function register_routes() {
-        register_rest_route('bemalearn/v1', '/me/earnings', [
-            'methods'             => 'GET',
-            'callback'            => [$this, 'get_earnings'],
-            'permission_callback' => [$this, 'check_authenticated'],
-        ]);
-
+   public function register_routes() {
+    register_rest_route('bemalearn/v1', '/me/earnings', [
+        'methods'             => 'GET',
+        'callback'            => [$this, 'get_earnings'],
+        'permission_callback' => [$this, 'check_instructor'],
+    ]);
         register_rest_route('bemalearn/v1', '/me/withdrawals', [
             'methods'             => 'POST',
             'callback'            => [$this, 'create_withdrawal'],
@@ -184,13 +183,21 @@ class BL_Earnings_Controller {
             $user->ID
         ));
 
-        if ($amount > $available) {
-            return new WP_Error(
-                'insufficient_balance',
-                'Your available balance is lower than the requested amount.',
-                ['status' => 422]
-            );
-        }
+        if ($amount < self::MINIMUM_WITHDRAWAL_MINOR) {
+    return new WP_Error(
+        'below_minimum',
+        'Withdrawal amount is below the minimum allowed.',
+        ['status' => 422]
+    );
+}
+
+if ($amount > $available) {
+    return new WP_Error(
+        'insufficient_balance',
+        'Your available balance is lower than the requested amount.',
+        ['status' => 422]
+    );
+}
 
         $pending = (int) $wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) FROM {$table} WHERE instructor_id = %d AND status = 'pending'",
