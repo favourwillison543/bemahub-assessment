@@ -1,23 +1,30 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Navbar } from "@/components/landing/navbar";
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+});
 
 export const metadata: Metadata = {
   title: "Bema Learn",
   description: "Assessment environment",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900">
+    <html lang="en" className={jakarta.variable}>
+      <body className="min-h-screen bg-bg">
         <Providers>
-          <header className="border-b bg-white">
-            <div className="mx-auto max-w-4xl px-6 py-4">
-              <h1 className="text-lg font-semibold">Bema Learn</h1>
-            </div>
-          </header>
-          <main className="mx-auto max-w-4xl px-6 py-8">{children}</main>
+          <Navbar />
+          <main>{children}</main>
         </Providers>
       </body>
     </html>
